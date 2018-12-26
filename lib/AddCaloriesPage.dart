@@ -12,6 +12,7 @@ class AddCaloriesPage extends StatefulWidget {
 
 class _AddCaloriesPageState extends State<AddCaloriesPage> {
   _AddCaloriesPageViewModel viewModel;
+  final TextEditingController _calorieEditTextController = TextEditingController();
 
   _AddCaloriesPageState() {
     //initialize viewmodel with trigger to update state
@@ -44,7 +45,9 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
               right: 96
             ),
             child: TextField(
-
+              textAlign: TextAlign.center,
+              controller: _calorieEditTextController,
+              keyboardType: TextInputType.number,
             )
           ),
           Padding(
@@ -52,7 +55,9 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
             child: MaterialButton(
               color: Colors.blue[200],
               onPressed: () {
-                viewModel.onAddCaloriesToDayPressed(200);
+                int calories = int.parse(_calorieEditTextController.text);
+                viewModel.onAddCaloriesToDayPressed(calories);
+                _calorieEditTextController.clear();
               },
               child: Text("Add"),
             ),
