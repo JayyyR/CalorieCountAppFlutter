@@ -51,7 +51,9 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
             )
           ),
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.only(
+              top: 16.0
+            ),
             child: MaterialButton(
               color: Colors.blue[200],
               onPressed: () {
@@ -60,6 +62,17 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
                 _calorieEditTextController.clear();
               },
               child: Text("Add"),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                top: 16.0
+            ),
+            child: MaterialButton(
+              color: Colors.red[200],
+              onPressed: () {
+              },
+              child: Text("End The Day"),
             ),
           )
         ],
