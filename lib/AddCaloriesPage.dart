@@ -11,26 +11,35 @@ class AddCaloriesPage extends StatefulWidget {
 }
 
 class _AddCaloriesPageState extends State<AddCaloriesPage> {
-
   _AddCaloriesPageViewModel viewModel;
 
   _AddCaloriesPageState() {
     //initialize viewmodel with trigger to update state
-    viewModel = _AddCaloriesPageViewModel(triggerViewStateChange: (){
-      setState(() {
-      });
+    viewModel = _AddCaloriesPageViewModel(triggerViewStateChange: () {
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    return Scaffold(
+      body: Center(
+          child: Column(
+        children: [
+          Text("Calorie Count: ${viewModel.totalCaloriesForDay}"),
+          MaterialButton(
+            onPressed: () {
+              viewModel.onAddCaloriesToDayPressed(200);
+            },
+            child: Text("Add"),
+          )
+        ],
+      )),
+    );
   }
 }
 
 class _AddCaloriesPageViewModel {
-
   final VoidCallback triggerViewStateChange;
   final PublishSubject<int> dayFinished = PublishSubject();
 
