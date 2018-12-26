@@ -25,13 +25,37 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
     return Scaffold(
       body: Center(
           child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Calorie Count: ${viewModel.totalCaloriesForDay}"),
-          MaterialButton(
-            onPressed: () {
-              viewModel.onAddCaloriesToDayPressed(200);
-            },
-            child: Text("Add"),
+          Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Text(
+              "Day's Calorie Count",
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Text(
+              "${viewModel.totalCaloriesForDay}",
+              style: TextStyle(fontSize: 16.0)
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 96,
+              right: 96
+            ),
+            child: TextField(
+
+            )
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: MaterialButton(
+              color: Colors.blue[200],
+              onPressed: () {
+                viewModel.onAddCaloriesToDayPressed(200);
+              },
+              child: Text("Add"),
+            ),
           )
         ],
       )),
@@ -43,9 +67,11 @@ class _AddCaloriesPageViewModel {
   final VoidCallback triggerViewStateChange;
   final PublishSubject<int> dayFinished = PublishSubject();
 
+  int totalCaloriesForDay = 0;
+
   _AddCaloriesPageViewModel({@required this.triggerViewStateChange});
 
-  int totalCaloriesForDay = 0;
+  void dispose() => dayFinished.close();
 
   void onAddCaloriesToDayPressed(int caloriesInMeal) {
     //add calories to total
@@ -54,6 +80,4 @@ class _AddCaloriesPageViewModel {
     //trigger view state
     triggerViewStateChange();
   }
-
-  void dispose() => dayFinished.close();
 }
