@@ -10,19 +10,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   _MyAppViewModel _viewModel;
-  List<Widget> _children;
-
   _MyAppState() {
-    _viewModel = _MyAppViewModel(triggerViewStateChange: () {
-      setState(() {});
-    });
-
-    _children = [
-      AddCaloriesPage(daySavedCallback: _viewModel.dayOfCaloriesSaved),
-      RecentDaysPage()
-    ];
+    _viewModel = _MyAppViewModel();
   }
 
   @override
@@ -32,51 +22,31 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.orange,
         ),
-        home: Scaffold(
-          appBar: AppBar(title: Text("Calorie Counter")),
-          body: _children[_viewModel.getCurrentIndex()],
-          bottomNavigationBar: Theme(
-              data: Theme.of(context).copyWith(
-                  canvasColor: Colors.white,
-                  primaryColor: Colors.orange,
-              ),
-              child: BottomNavigationBar(
-                items: [
-                  BottomNavigationBarItem(
+        home: DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text("Calorie Counter"),
+                bottom: TabBar(
+                  tabs: [
+                    Tab(
                       icon: Icon(Icons.home),
-                      title: Text("Today")
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.calendar_today),
-                      title: Text("Recent")
-                  )
-                ],
-                onTap: (int indexTapped) {
-                  _viewModel.updateCurrentIndex(indexTapped);
-                },
-                currentIndex: _viewModel.getCurrentIndex())
-          )
-        )
-    );
+                      text: "Today",
+                    ),
+                    Tab(icon: Icon(Icons.calendar_today), text: "Recent"),
+                  ],
+                ),
+              ),
+              body: TabBarView(children: [
+                AddCaloriesPage(
+                    daySavedCallback: _viewModel.dayOfCaloriesSaved),
+                RecentDaysPage()
+              ]),
+            )));
   }
 }
 
 class _MyAppViewModel {
-
-  final VoidCallback triggerViewStateChange;
-  int _currentIndex = 0;
-
-  _MyAppViewModel({@required this.triggerViewStateChange});
-
-  int getCurrentIndex() {
-    return _currentIndex;
-  }
-
-  updateCurrentIndex(int index) {
-    _currentIndex = index;
-    triggerViewStateChange();
-  }
-
   final Function(int) dayOfCaloriesSaved = (int) {
     //todo save something
   };
