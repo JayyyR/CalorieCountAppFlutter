@@ -3,7 +3,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:calorie_counter/StorageHelper.dart';
 
 class RecentDaysPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     return _RecentDaysPageState();
@@ -21,25 +20,40 @@ class _RecentDaysPageState extends State<RecentDaysPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16.0),
-      itemCount: _viewModel.getRecentCaloriesLength() * 2,
-      itemBuilder: (context, i) {
-        if (i.isOdd) {
-          return Divider();
-        }
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(16),
+          child:  Text(
+            "Calories Consumed",
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          )
+        ),
+        Flexible(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: _viewModel.getRecentCaloriesLength() * 2,
+            itemBuilder: (context, i) {
+              if (i.isOdd) {
+                return Divider();
+              }
 
-        final index = i ~/ 2;
-        final daysAgo = index + 1;
-        final daysAgoString = (daysAgo == 1) ? "yesterday" : "$daysAgo days ago";
-        String dayText = "Calories consumed $daysAgoString: "
-            "${_viewModel.getCaloriesConsumed(daysAgo)}";
-        return Text(
-            dayText,
-            style: TextStyle(fontSize: 16.0),
-            textAlign: TextAlign.center,
-        );
-      },
+              final index = i ~/ 2;
+              final daysAgo = index + 1;
+              final daysAgoString =
+              (daysAgo == 1) ? "Yesterday" : "$daysAgo days ago";
+              String dayText = "$daysAgoString: "
+                  "${_viewModel.getCaloriesConsumed(daysAgo)}";
+              return Text(
+                dayText,
+                style: TextStyle(fontSize: 16.0),
+                textAlign: TextAlign.center,
+              );
+            },
+          ),
+        )
+
+      ],
     );
   }
 }
