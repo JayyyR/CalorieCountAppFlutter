@@ -60,13 +60,14 @@ PublishSubject<List<int>> getRecentCalories() {
   SharedPreferences.getInstance().then((sharedPrefs) {
     String recentCaloriesJson = sharedPrefs.getString(RECENT_CALORIES);
 
-    List<dynamic> recentCalories;
+    List<int> recentCalories;
 
     if (recentCaloriesJson != null) {
-      recentCalories = json.decode(recentCaloriesJson);
+      List<dynamic> rawRecentCaloriesList = json.decode(recentCaloriesJson);
+      recentCalories = rawRecentCaloriesList.cast<int>().toList();
     }
 
-    recentCaloriesStream.add(recentCalories.cast<int>().toList());
+    recentCaloriesStream.add(recentCalories);
     recentCaloriesStream.close();
   });
 
