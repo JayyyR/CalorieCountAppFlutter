@@ -13,13 +13,13 @@ class AddCaloriesPage extends StatefulWidget {
 }
 
 class _AddCaloriesPageState extends State<AddCaloriesPage> {
-  _AddCaloriesPageViewModel viewModel;
+  _AddCaloriesPageViewModel _viewModel;
   final TextEditingController _calorieEditTextController =
       TextEditingController();
 
   _AddCaloriesPageState() {
     //initialize viewmodel with trigger to update state
-    viewModel = _AddCaloriesPageViewModel(triggerViewStateChange: () {
+    _viewModel = _AddCaloriesPageViewModel(triggerViewStateChange: () {
       setState(() {});
     });
   }
@@ -37,7 +37,7 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
           ),
-          Text("${viewModel.totalCaloriesForDay}",
+          Text("${_viewModel.totalCaloriesForDay}",
               style: TextStyle(fontSize: 16.0)),
           Padding(
               padding: EdgeInsets.only(left: 96, right: 96),
@@ -57,7 +57,7 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
                   child: MaterialButton(
                     color: Colors.red[200],
                     onPressed: () {
-                      viewModel.clearCalories();
+                      _viewModel.clearCalories();
                     },
                     child: Text("Clear"),
                   ),
@@ -67,9 +67,8 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
                     child: MaterialButton(
                       color: Colors.blue[200],
                       onPressed: () {
-                        int calories =
-                            int.parse(_calorieEditTextController.text);
-                        viewModel.onAddCaloriesToDayPressed(calories);
+                        int calories = int.parse(_calorieEditTextController.text);
+                        _viewModel.onAddCaloriesToDayPressed(calories);
                         _calorieEditTextController.clear();
                         SystemChannels.textInput.invokeMethod('TextInput.hide');
                       },
@@ -82,7 +81,9 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
             padding: EdgeInsets.only(top: 16.0),
             child: MaterialButton(
               color: Colors.green[200],
-              onPressed: () {},
+              onPressed: () {
+                _viewModel.saveDaysCalories();
+              },
               child: Text("End The Day"),
             ),
           )
@@ -94,26 +95,28 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
 
 class _AddCaloriesPageViewModel {
   final VoidCallback triggerViewStateChange;
-  final PublishSubject<int> dayFinished = PublishSubject();
 
   int totalCaloriesForDay = 0;
 
   _AddCaloriesPageViewModel({@required this.triggerViewStateChange}) {
     //get calories from storage
     getCaloriesInProgress().listen((caloriesInProgress) {
-      totalCaloriesForDay = caloriesInProgress;
-      triggerViewStateChange();
-    }, onError: (error) {
-      print("");
+      if (caloriesInProgress != null) {
+        totalCaloriesForDay = caloriesInProgress;
+        triggerViewStateChange();
+      }
     });
   }
-
-  void dispose() => dayFinished.close();
 
   void clearCalories() {
     totalCaloriesForDay = 0;
     triggerViewStateChange();
     saveCaloriesInProgress(totalCaloriesForDay);
+  }
+
+  void saveDaysCalories() {
+    saveTodaysCalories(totalCaloriesForDay);
+    clearCalories();
   }
 
   void onAddCaloriesToDayPressed(int caloriesInMeal) {
