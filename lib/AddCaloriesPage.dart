@@ -1,4 +1,6 @@
+import 'package:calorie_counter/StorageHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AddCaloriesPage extends StatefulWidget {
@@ -23,8 +25,7 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -60,6 +61,7 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
                 int calories = int.parse(_calorieEditTextController.text);
                 viewModel.onAddCaloriesToDayPressed(calories);
                 _calorieEditTextController.clear();
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
               },
               child: Text("Add"),
             ),
@@ -76,7 +78,7 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
             ),
           )
         ],
-      )),
+      ),
     );
   }
 }
@@ -87,7 +89,16 @@ class _AddCaloriesPageViewModel {
 
   int totalCaloriesForDay = 0;
 
-  _AddCaloriesPageViewModel({@required this.triggerViewStateChange});
+  _AddCaloriesPageViewModel({@required this.triggerViewStateChange}) {
+
+    //get calories from storage
+    getCaloriesInProgress().listen( (caloriesInProgress) {
+      totalCaloriesForDay = caloriesInProgress;
+      triggerViewStateChange();
+    }, onError:(error) {
+      print("");
+    });
+  }
 
   void dispose() => dayFinished.close();
 
@@ -97,5 +108,7 @@ class _AddCaloriesPageViewModel {
 
     //trigger view state
     triggerViewStateChange();
+
+    saveCaloriesInProgress(totalCaloriesForDay);
   }
 }

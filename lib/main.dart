@@ -20,7 +20,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: 'Calorie Counter',
         theme: ThemeData(
-          primarySwatch: Colors.orange,
+          primaryColor: Color(0xfff19c38),
+          accentColor: Colors.white
         ),
         home: DefaultTabController(
             length: 2,
