@@ -1,4 +1,5 @@
 import 'package:calorie_counter/StorageHelper.dart';
+import 'package:calorie_counter/Strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
@@ -24,6 +25,38 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
     });
   }
 
+  void _showEndDayDialog() {
+    showDialog(context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text (Strings.END_THE_DAY_DIALOG_TITLE),
+        content: Text(Strings.END_THE_DAY_DIALOG_BODY),
+        actions: [
+          FlatButton(
+            child: Text(Strings.CANCEL),
+            textColor: Colors.black,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            child: Text(Strings.YES),
+            textColor: Colors.black,
+            onPressed: () {
+              _viewModel.saveDaysCalories();
+              Navigator.of(context).pop();
+            }
+          ),
+        ],
+      );
+    });
+  }
+
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -33,7 +66,7 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
           Padding(
             padding: EdgeInsets.all(12.0),
             child: Text(
-              "Day's Calorie Count",
+              Strings.DAY_CALORIE_COUNT,
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
           ),
@@ -59,7 +92,7 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
                     onPressed: () {
                       _viewModel.clearCalories();
                     },
-                    child: Text("Clear"),
+                    child: Text(Strings.CLEAR),
                   ),
                 ),
                 Padding(
@@ -67,12 +100,18 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
                     child: MaterialButton(
                       color: Colors.blue[200],
                       onPressed: () {
-                        int calories = int.parse(_calorieEditTextController.text);
-                        _viewModel.onAddCaloriesToDayPressed(calories);
-                        _calorieEditTextController.clear();
-                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        int calories = int.tryParse(_calorieEditTextController.text);
+
+                        if (calories != null && calories > 0) {
+                          _viewModel.onAddCaloriesToDayPressed(calories);
+                          _calorieEditTextController.clear();
+                          SystemChannels.textInput.invokeMethod(
+                              'TextInput.hide');
+                        } else {
+                          _showSnackBar(Strings.NON_VALID_INPUT_MSG);
+                        }
                       },
-                      child: Text("Add"),
+                      child: Text(Strings.ADD),
                     )),
               ],
             ),
@@ -82,9 +121,13 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
             child: MaterialButton(
               color: Colors.green[200],
               onPressed: () {
-                _viewModel.saveDaysCalories();
+                if (_viewModel.totalCaloriesForDay > 0) {
+                  _showEndDayDialog();
+                } else {
+                  _showSnackBar(Strings.YOU_HAVENT_CONSUMED_ANY);
+                }
               },
-              child: Text("End The Day"),
+              child: Text(Strings.END_THE_DAY_BUTTON),
             ),
           )
         ],
