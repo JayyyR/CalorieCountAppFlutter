@@ -53,7 +53,8 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
   }
 
   void _showSnackBar(String message) {
-    final snackBar = SnackBar(content: Text(message));
+    final snackBar = SnackBar(content: Text(message),
+        duration: Duration(milliseconds: 2000));
     Scaffold.of(context).showSnackBar(snackBar);
   }
 

@@ -11,6 +11,9 @@ class Strings {
   static const CALORIES_CONSUMED = "Calories Consumed";
   static const YES = "Yes";
   static const CANCEL = "Cancel";
-  static const YOU_HAVENT_CONSUMED_ANY = "You haven't consumed any calories";
+  static const YOU_HAVENT_CONSUMED_ANY = "You haven't consumed any calories yet";
   static const NON_VALID_INPUT_MSG = "You must enter a valid number";
+  static const YESTERDAY = "Yesterday";
+  static const DAYS_AGO = "days ago";
+  static const CALORIE_COUNTER = "Calorie Counter";
 }

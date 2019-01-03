@@ -1,5 +1,5 @@
+import 'package:calorie_counter/Strings.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:calorie_counter/StorageHelper.dart';
 
 class RecentDaysPage extends StatefulWidget {
@@ -25,7 +25,7 @@ class _RecentDaysPageState extends State<RecentDaysPage> {
         Padding(
           padding: EdgeInsets.all(16),
           child:  Text(
-            "Calories Consumed",
+            Strings.CALORIES_CONSUMED,
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           )
         ),
@@ -41,7 +41,7 @@ class _RecentDaysPageState extends State<RecentDaysPage> {
               final index = i ~/ 2;
               final daysAgo = index + 1;
               final daysAgoString =
-              (daysAgo == 1) ? "Yesterday" : "$daysAgo days ago";
+              (daysAgo == 1) ? Strings.YESTERDAY : "$daysAgo ${Strings.DAYS_AGO}";
               String dayText = "$daysAgoString: "
                   "${_viewModel.getCaloriesConsumed(daysAgo)}";
               return Text(

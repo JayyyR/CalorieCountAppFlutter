@@ -1,5 +1,6 @@
 import 'package:calorie_counter/AddCaloriesPage.dart';
 import 'package:calorie_counter/RecentDaysPage.dart';
+import 'package:calorie_counter/Strings.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -18,7 +19,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Calorie Counter',
+        title: Strings.CALORIE_COUNTER,
         theme: ThemeData(
           primaryColor: Color(0xfff19c38),
           accentColor: Colors.white
@@ -27,14 +28,14 @@ class _MyAppState extends State<MyApp> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                title: Text("Calorie Counter"),
+                title: Text(Strings.CALORIE_COUNTER),
                 bottom: TabBar(
                   tabs: [
                     Tab(
-                      icon: Icon(Icons.home),
-                      text: "Today",
+                      icon: Icon(Icons.calendar_today),
+                      text: Strings.TODAY,
                     ),
-                    Tab(icon: Icon(Icons.calendar_today), text: "Recent"),
+                    Tab(icon: Icon(Icons.calendar_view_day), text: Strings.RECENT),
                   ],
                 ),
               ),
