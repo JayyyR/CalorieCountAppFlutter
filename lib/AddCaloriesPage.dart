@@ -106,8 +106,11 @@ class _AddCaloriesPageState extends State<AddCaloriesPage> {
                         if (calories != null && calories > 0) {
                           _viewModel.onAddCaloriesToDayPressed(calories);
                           _calorieEditTextController.clear();
-                          SystemChannels.textInput.invokeMethod(
-                              'TextInput.hide');
+                          bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+                          if (isIOS) {
+                            SystemChannels.textInput.invokeMethod('TextInput.hide');
+                          }
                         } else {
                           _showSnackBar(Strings.NON_VALID_INPUT_MSG);
                         }

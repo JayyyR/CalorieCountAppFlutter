@@ -15,5 +15,5 @@ class Strings {
   static const NON_VALID_INPUT_MSG = "You must enter a valid number";
   static const YESTERDAY = "Yesterday";
   static const DAYS_AGO = "days ago";
-  static const CALORIE_COUNTER = "Calorie Counter";
+  static const CALORIE_COUNTER = "Daily Calorie Counter";
 }
